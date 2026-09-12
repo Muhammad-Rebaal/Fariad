@@ -117,7 +117,10 @@ def prepare_temp_profile(real_user_data_dir, profile_dir, temp_dir):
     print(f"Session copied to: {temp_dir}")
 
 
-def run_automation(prompt_text: str, image_path: str = None) -> str:
+def run_automation(prompt_text: str, image_path: str = None, user_data: dict = None) -> str:
+    if user_data:
+        context_str = f"User Context:\nName: {user_data.get('name')}\nEmail: {user_data.get('email')}\nDistrict: {user_data.get('district')}\nPostal Code: {user_data.get('postal_code')}\nStreet: {user_data.get('street')}\n\n"
+        prompt_text = context_str + f"User Request: {prompt_text}"
     chrome_exe = find_chrome()
     if not chrome_exe:
         raise Exception("ERROR: Could not find Chrome installation.")
@@ -199,22 +202,25 @@ def run_automation(prompt_text: str, image_path: str = None) -> str:
             print(f"Typing prompt: '{prompt_text}'")
             page.keyboard.type(prompt_text)
 
-            # Step 3: Upload image if provided
+            # Step 3: Upload files (system_prompt.md and optionally the image)
+            files_to_upload = [os.path.join(project_dir, "system_prompt.md")]
             if image_path and os.path.exists(image_path):
-                print(f"Uploading image: {image_path}")
-                try:
-                    # Most robust way: target the hidden file input directly
-                    page.locator("input[type='file']").set_input_files(image_path)
-                except Exception:
-                    # Fallback to UI clicks using more robust locators
-                    page.locator("button[aria-label='Upload & tools']").click()
-                    time.sleep(1)
-                    with page.expect_file_chooser() as fc_info:
-                        page.locator("text=Upload files").first.click()
-                    fc_info.value.set_files(image_path)
-                    
-                print("Image attached!")
-                time.sleep(3)
+                files_to_upload.append(image_path)
+                
+            print(f"Uploading files: {files_to_upload}")
+            try:
+                # Most robust way: target the hidden file input directly
+                page.locator("input[type='file']").set_input_files(files_to_upload)
+            except Exception:
+                # Fallback to UI clicks using more robust locators
+                page.locator("button[aria-label='Upload & tools']").click()
+                time.sleep(1)
+                with page.expect_file_chooser() as fc_info:
+                    page.locator("text=Upload files").first.click()
+                fc_info.value.set_files(files_to_upload)
+                
+            print("Files attached!")
+            time.sleep(3)
 
             # Step 4: Click send (arrow_upward)
             print("Clicking send button...")

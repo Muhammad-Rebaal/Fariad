@@ -13,6 +13,46 @@ document.addEventListener('DOMContentLoaded', () => {
     const badge = responseSection.querySelector('.badge');
     const fileUploadLabel = document.querySelector('.file-upload-label');
 
+    // User Detail Inputs
+    const nameInput = document.getElementById('nameInput');
+    const emailInput = document.getElementById('emailInput');
+    const districtInput = document.getElementById('districtInput');
+    const postalCodeInput = document.getElementById('postalCodeInput');
+    const streetInput = document.getElementById('streetInput');
+
+    // Load saved details
+    const personalDetailsSection = document.getElementById('personalDetailsSection');
+    const personalDetailsSummary = document.getElementById('personalDetailsSummary');
+    const editDetailsBtn = document.getElementById('editDetailsBtn');
+
+    const savedName = localStorage.getItem('fariad_user_name');
+    const savedEmail = localStorage.getItem('fariad_user_email');
+    if (savedName && savedEmail) {
+        nameInput.value = savedName;
+        emailInput.value = savedEmail;
+        districtInput.value = localStorage.getItem('fariad_user_district') || '';
+        postalCodeInput.value = localStorage.getItem('fariad_user_postalCode') || '';
+        streetInput.value = localStorage.getItem('fariad_user_street') || '';
+
+        personalDetailsSection.classList.add('hidden');
+        editDetailsBtn.classList.remove('hidden');
+        personalDetailsSummary.classList.remove('hidden');
+        personalDetailsSummary.innerHTML = `<strong>${savedName}</strong> (${savedEmail})<br>${streetInput.value}, ${districtInput.value} ${postalCodeInput.value}`;
+    }
+
+    if (editDetailsBtn) {
+        editDetailsBtn.addEventListener('click', () => {
+            personalDetailsSection.classList.toggle('hidden');
+            if (personalDetailsSection.classList.contains('hidden')) {
+                editDetailsBtn.textContent = 'Edit';
+                personalDetailsSummary.classList.remove('hidden');
+            } else {
+                editDetailsBtn.textContent = 'Done';
+                personalDetailsSummary.classList.add('hidden');
+            }
+        });
+    }
+
     // Handle drag and drop styling
     ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
         fileUploadLabel.addEventListener(eventName, preventDefaults, false);
@@ -79,6 +119,13 @@ document.addEventListener('DOMContentLoaded', () => {
     // Handle form submission
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
+        
+        // Save user details to localStorage
+        localStorage.setItem('fariad_user_name', nameInput.value);
+        localStorage.setItem('fariad_user_email', emailInput.value);
+        localStorage.setItem('fariad_user_district', districtInput.value);
+        localStorage.setItem('fariad_user_postalCode', postalCodeInput.value);
+        localStorage.setItem('fariad_user_street', streetInput.value);
         
         // UI updates for loading state
         submitBtn.disabled = true;
