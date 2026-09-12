@@ -200,7 +200,11 @@ def run_automation(prompt_text: str, image_path: str = None, user_data: dict = N
 
             # Step 2: Type the prompt
             print(f"Typing prompt: '{prompt_text}'")
-            page.keyboard.type(prompt_text)
+            lines = prompt_text.split('\n')
+            for i, line in enumerate(lines):
+                page.keyboard.type(line)
+                if i < len(lines) - 1:
+                    page.keyboard.press("Shift+Enter")
 
             # Step 3: Upload files (system_prompt.md and optionally the image)
             files_to_upload = [os.path.join(project_dir, "system_prompt.md")]
