@@ -18,7 +18,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 # Import the refactored automation script
 from main import run_automation
-from database import init_db, get_or_create_user, create_complaint, get_similar_complaints_count, get_cached_response, save_cached_response, get_all_complaints
+from database import init_db, get_or_create_user, create_complaint, get_similar_complaints_count, get_cached_response, save_cached_response
 
 app = FastAPI(title="Gemini Automation API")
 
