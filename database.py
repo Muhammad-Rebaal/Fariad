@@ -53,3 +53,14 @@ def create_complaint(user_id: int, complaint_text: str, complaint_type: str = "G
         """, (user_id, complaint_type, complaint_text, department, "PENDING", 0))
         conn.commit()
         return cursor.lastrowid
+
+def get_similar_complaints_count(district: str, street: str) -> int:
+    """Returns the number of prior complaints registered in the same area."""
+    with sqlite3.connect(DB_PATH) as conn:
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT COUNT(*) FROM complaints c
+            JOIN users u ON c.user_id = u.id
+            WHERE u.district = ? AND u.street = ?
+        """, (district, street))
+        return cursor.fetchone()[0]

@@ -11,7 +11,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 # Import the refactored automation script
 from main import run_automation
-from database import init_db, get_or_create_user, create_complaint
+from database import init_db, get_or_create_user, create_complaint, get_similar_complaints_count
 
 app = FastAPI(title="Gemini Automation API")
 
@@ -62,8 +62,10 @@ def ask_gemini(
         }
         if email:
             user_id = get_or_create_user(name, email, district, postal_code, street)
+            prior_count = get_similar_complaints_count(district, street)
             create_complaint(user_id, prompt)
             print(f"Saved user {email} (ID: {user_id}) to database.")
+            user_data["prior_complaints"] = prior_count
             
         # Run the automation script
         print(f"Running automation with prompt: '{prompt}' and image: {image_path}")

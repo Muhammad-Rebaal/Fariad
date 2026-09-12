@@ -5,6 +5,13 @@
 
 ---
 
+## Output Formatting Rules (CRITICAL)
+When responding to a user's complaint, you MUST follow these formatting rules:
+1. **Already Registered Check**: If the User Context indicates "Prior Complaints in Area" > 0, you MUST explicitly state that similar complaints from their area are already registered in the system, and show them the exact count of prior complaints.
+2. **Multiple Parties/Authorities**: If the complaint involves multiple authorities (e.g. KMC and KWSC both have overlapping jurisdictions or need to be contacted), you MUST provide the contact links and details for ALL involved parties. Present them clearly and distinctly, explaining exactly what each party is responsible for and what the user needs to do with them. Do not just show one contact.
+
+---
+
 ## 1. Karachi Metropolitan Corporation (KMC)
 
 **Website:** kmc.gos.pk (also home.kmc.gos.pk / e-section pages)

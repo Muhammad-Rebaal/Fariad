@@ -119,7 +119,9 @@ def prepare_temp_profile(real_user_data_dir, profile_dir, temp_dir):
 
 def run_automation(prompt_text: str, image_path: str = None, user_data: dict = None) -> str:
     if user_data:
-        context_str = f"User Context:\nName: {user_data.get('name')}\nEmail: {user_data.get('email')}\nDistrict: {user_data.get('district')}\nPostal Code: {user_data.get('postal_code')}\nStreet: {user_data.get('street')}\n\n"
+        prior = user_data.get('prior_complaints', 0)
+        prior_str = f"\nPrior Complaints in Area: {prior}" if prior > 0 else ""
+        context_str = f"User Context:\nName: {user_data.get('name')}\nEmail: {user_data.get('email')}\nDistrict: {user_data.get('district')}\nPostal Code: {user_data.get('postal_code')}\nStreet: {user_data.get('street')}{prior_str}\n\n"
         prompt_text = context_str + f"User Request: {prompt_text}"
     chrome_exe = find_chrome()
     if not chrome_exe:
