@@ -133,7 +133,16 @@ def run_automation(prompt_text: str, image_path: str = None, user_data: dict = N
     # Prepare a clean single-profile directory with your session cookies
     project_dir = os.path.dirname(os.path.abspath(__file__))
     temp_profile_dir = os.path.join(project_dir, "chrome_profile")
-    prepare_temp_profile(user_data_dir, profile_dir, temp_profile_dir)
+    cookie_file = os.path.join(project_dir, "cookie.json")
+    
+    if os.path.exists(cookie_file):
+        print("cookie.json found. Skipping local profile copy to prevent 'Verify it's you' mismatch.")
+        # Wipe the temp profile to ensure a completely clean slate for the cookies
+        if os.path.exists(temp_profile_dir):
+            shutil.rmtree(temp_profile_dir, ignore_errors=True)
+        os.makedirs(temp_profile_dir, exist_ok=True)
+    else:
+        prepare_temp_profile(user_data_dir, profile_dir, temp_profile_dir)
 
     try:
         with sync_playwright() as p:
