@@ -1,7 +1,8 @@
-Road damage in Block 6, Gulshan-e-Iqbal falls under the jurisdiction of the Karachi Metropolitan Corporation (KMC). You can file a formal municipal complaint using the specific channels they actively monitor.
+Assuming you are looking to report the severe road collapse shown in "road.jpeg" on anthign street, you will need to contact the relevant municipal authorities in Malir. Because jurisdiction in Malir is split between regular municipal zones and military cantonment limits, you must verify your exact boundary to determine whether the Karachi Metropolitan Corporation (KMC) or Cantonment Board Malir is responsible.
 
-Filing a Complaint with KMC
+Karachi Metropolitan Corporation (KMC)
+If your street is in a non-cantonment area of Malir, KMC (and the delegated District Municipal Corporation) is responsible for road infrastructure and repairs.
 
-Phone Helpline: Call the dedicated KMC line at 1339. The operator will log and route the complaint. Alternatively, the 24/7 Sindh-wide local government complaint line is 1093.
+Phone Helpline: Call 1339, which is KMC's dedicated line where an operator will log and route your complaint. You can also use the Sindh-wide Local Government Department helpline at 1093.
 
-Online Portal: Go directly to the CCIS system at complaint.kmc.gos.pk/ccis and select "Log New Complaint".
+Online CCIS Portal: Visit complaint.kmc.gos.pk/ccis and select "Log New Complaint". You will need to select your town/UC or nearest landmark to proceed. Do not use the "contact us" page on the main KMC website, as it is currently running placeholder content and will not process your request

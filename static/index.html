@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,6 +10,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
     <div class="background-elements">
         <div class="glow-orb orb-1"></div>
@@ -18,6 +20,7 @@
 
     <div class="container">
         <header>
+            <img src="logo.jpeg" alt="Fariad Logo" class="project-logo">
             <h1>Fariad</h1>
             <p>Deploy prompts and images directly to your active session.</p>
         </header>
@@ -27,51 +30,68 @@
 
             <div class="glass-panel input-section">
                 <form id="geminiForm">
-                    <div class="personal-details-header" style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem; margin-bottom: 1rem;">
+                    <div class="personal-details-header"
+                        style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem; margin-bottom: 1rem;">
                         <h3 style="margin: 0; color: var(--text-muted); font-size: 1.1rem;">Personal Details</h3>
-                        <button type="button" id="editDetailsBtn" class="icon-btn hidden" style="font-size: 0.9rem; text-decoration: underline;">Edit</button>
+                        <button type="button" id="editDetailsBtn" class="icon-btn hidden"
+                            style="font-size: 0.9rem; text-decoration: underline;">Edit</button>
                     </div>
-                    
-                    <div id="personalDetailsSummary" class="hidden" style="color: var(--text-main); font-size: 0.95rem; margin-bottom: 1.5rem; padding: 1rem; background: rgba(15,23,42,0.5); border-radius: 12px; border: 1px solid var(--glass-border);">
+
+                    <div id="personalDetailsSummary" class="hidden"
+                        style="color: var(--text-main); font-size: 0.95rem; margin-bottom: 1.5rem; padding: 1rem; background: rgba(15,23,42,0.5); border-radius: 12px; border: 1px solid var(--glass-border);">
                     </div>
 
                     <div id="personalDetailsSection">
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                        <div class="form-group">
-                            <label for="nameInput">Full Name</label>
-                            <input type="text" id="nameInput" name="name" class="text-input" placeholder="John Doe" required>
+                            <div class="form-group">
+                                <label for="nameInput">Full Name</label>
+                                <input type="text" id="nameInput" name="name" class="text-input" placeholder="John Doe"
+                                    required>
+                            </div>
+                            <div class="form-group">
+                                <label for="emailInput">Email Address</label>
+                                <input type="email" id="emailInput" name="email" class="text-input"
+                                    placeholder="john@example.com" required>
+                            </div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                            <div class="form-group">
+                                <label for="districtInput">District / City</label>
+                                <input type="text" id="districtInput" name="district" class="text-input"
+                                    placeholder="South" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="postalCodeInput">Postal Code</label>
+                                <input type="text" id="postalCodeInput" name="postal_code" class="text-input"
+                                    placeholder="75500" required>
+                            </div>
                         </div>
                         <div class="form-group">
-                            <label for="emailInput">Email Address</label>
-                            <input type="email" id="emailInput" name="email" class="text-input" placeholder="john@example.com" required>
+                            <label for="streetInput">Street Address</label>
+                            <input type="text" id="streetInput" name="street" class="text-input"
+                                placeholder="123 Civic Road" required>
                         </div>
-                    </div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                        <div class="form-group">
-                            <label for="districtInput">District / City</label>
-                            <input type="text" id="districtInput" name="district" class="text-input" placeholder="South" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="postalCodeInput">Postal Code</label>
-                            <input type="text" id="postalCodeInput" name="postal_code" class="text-input" placeholder="75500" required>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="streetInput">Street Address</label>
-                        <input type="text" id="streetInput" name="street" class="text-input" placeholder="123 Civic Road" required>
-                    </div>
                     </div>
 
-                    <h3 style="margin-top: 1.5rem; margin-bottom: 1rem; color: var(--text-muted); font-size: 1.1rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">Complaint Details</h3>
+                    <h3
+                        style="margin-top: 1.5rem; margin-bottom: 1rem; color: var(--text-muted); font-size: 1.1rem; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 0.5rem;">
+                        Complaint Details</h3>
                     <div class="form-group">
-                        <label for="promptInput">Your Prompt</label>
-                        <textarea id="promptInput" name="prompt" placeholder="Ask anything, like 'What is it?'..." required></textarea>
+                        <label for="promptInput">Your Request</label>
+                        <textarea id="promptInput" name="prompt" placeholder="Ask anything, like 'What is it?'..."
+                            required></textarea>
                     </div>
 
                     <div class="form-group file-upload-wrapper">
                         <label for="imageInput" class="file-upload-label">
                             <span class="upload-icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                    fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                    stroke-linejoin="round">
+                                    <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                    <polyline points="17 8 12 3 7 8"></polyline>
+                                    <line x1="12" y1="3" x2="12" y2="15"></line>
+                                </svg>
                             </span>
                             <span class="upload-text">Drag & drop or click to upload an image</span>
                         </label>
@@ -98,7 +118,7 @@
                     <!-- Response injected here via JS -->
                 </div>
             </div>
-            
+
             <div id="loadingOverlay" class="loading-overlay hidden">
                 <div class="loading-content">
                     <div class="large-spinner"></div>
@@ -111,4 +131,5 @@
 
     <script src="app.js"></script>
 </body>
+
 </html>

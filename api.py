@@ -6,12 +6,13 @@ from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 import uvicorn
 from typing import Optional
+import hashlib
 
 from fastapi.middleware.cors import CORSMiddleware
 
 # Import the refactored automation script
 from main import run_automation
-from database import init_db, get_or_create_user, create_complaint, get_similar_complaints_count
+from database import init_db, get_or_create_user, create_complaint, get_similar_complaints_count, get_cached_response, save_cached_response
 
 app = FastAPI(title="Gemini Automation API")
 
@@ -43,12 +44,18 @@ def ask_gemini(
     street: str = Form("")
 ):
     image_path = None
+    image_hash = None
     
     if image and image.filename:
         # Save the uploaded image temporarily
         image_path = os.path.join(IMG_DIR, image.filename)
+        
+        # Read the file content and compute SHA-256 hash
+        file_content = image.file.read()
+        image_hash = hashlib.sha256(file_content).hexdigest()
+        
         with open(image_path, "wb") as buffer:
-            shutil.copyfileobj(image.file, buffer)
+            buffer.write(file_content)
             
     try:
         # Save user to DB
@@ -67,10 +74,21 @@ def ask_gemini(
             print(f"Saved user {email} (ID: {user_id}) to database.")
             user_data["prior_complaints"] = prior_count
             
+        # Check cache
+        if image_hash:
+            cached_res = get_cached_response(image_hash)
+            if cached_res:
+                print("Found cached response for this image! Skipping automation and returning cached result.")
+                return JSONResponse(content={"status": "success", "response": cached_res})
+            
         # Run the automation script
         print(f"Running automation with prompt: '{prompt}' and image: {image_path}")
         result_text = run_automation(prompt_text=prompt, image_path=image_path, user_data=user_data)
         
+        # Save to cache for future identical images
+        if image_hash and not result_text.startswith("Error:"):
+            save_cached_response(image_hash, result_text)
+            
         return JSONResponse(content={"status": "success", "response": result_text})
         
     except Exception as e:

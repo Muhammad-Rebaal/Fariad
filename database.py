@@ -15,6 +15,15 @@ def init_db():
             conn.commit()
         else:
             print("Database already initialized.")
+            
+        # Ensure image_cache table exists
+        conn.execute("""
+            CREATE TABLE IF NOT EXISTS image_cache (
+                image_hash TEXT PRIMARY KEY,
+                response_text TEXT
+            )
+        """)
+        conn.commit()
 
 def get_or_create_user(name: str, email: str, district: str, postal_code: str, street: str) -> int:
     """Gets an existing user by email, or creates a new one. Returns the user ID."""
@@ -64,3 +73,18 @@ def get_similar_complaints_count(district: str, street: str) -> int:
             WHERE u.district = ? AND u.street = ?
         """, (district, street))
         return cursor.fetchone()[0]
+
+def get_cached_response(image_hash: str):
+    """Retrieves a cached response for a given image hash."""
+    with sqlite3.connect(DB_PATH) as conn:
+        cursor = conn.cursor()
+        cursor.execute("SELECT response_text FROM image_cache WHERE image_hash = ?", (image_hash,))
+        row = cursor.fetchone()
+        return row[0] if row else None
+
+def save_cached_response(image_hash: str, response_text: str):
+    """Saves a response to the cache for a given image hash."""
+    with sqlite3.connect(DB_PATH) as conn:
+        cursor = conn.cursor()
+        cursor.execute("INSERT OR REPLACE INTO image_cache (image_hash, response_text) VALUES (?, ?)", (image_hash, response_text))
+        conn.commit()

@@ -234,8 +234,8 @@ def run_automation(prompt_text: str, image_path: str = None, user_data: dict = N
                     page.locator("text=Upload files").first.click()
                 fc_info.value.set_files(files_to_upload)
                 
-            print("Files attached!")
-            time.sleep(3)
+            print("Files attached! Waiting 10 seconds to ensure upload is fully processed by Gemini...")
+            time.sleep(10)
 
             # Step 4: Click send (arrow_upward)
             print("Clicking send button...")
