@@ -163,14 +163,6 @@ def launch_complaint(
         print(f"Error launching complaint: {e}")
         return JSONResponse(status_code=500, content={"status": "error", "message": str(e)})
 
-@app.get("/api/complaints")
-def list_complaints():
-    try:
-        complaints = get_all_complaints()
-        return JSONResponse(content={"status": "success", "data": complaints})
-    except Exception as e:
-        return JSONResponse(status_code=500, content={"status": "error", "message": str(e)})
-
 # Serve the static frontend files
 app.mount("/", StaticFiles(directory=STATIC_DIR, html=True), name="static")
 
