@@ -1,0 +1,17 @@
+First guess the current version of the chrome on system and use the same profile the user has logged in into so that I can use google gemini pro
+Go to gemini : "https://gemini.google.com/app"
+
+Click on it for pasting text : "//div[@aria-label='Enter a prompt for Gemini']//p"
+write the prompt what is it ?
+if image :
+1st click on this : "//button[@aria-label='Upload & tools']//span[@class='mat-focus-indicator']"
+
+then click upload files : "//span[@class='menu-text gem-menu-item-label']"
+
+take the file each time from here : C:\Users\Muhammad Rebaal\Desktop\CWA\img
+
+if both text and image is passed then click on this : "//mat-icon[@data-mat-icon-name='arrow_upward']"
+
+wait around 20 sec
+
+get all the text from this and paste it on the text of the root proeject as data.txt

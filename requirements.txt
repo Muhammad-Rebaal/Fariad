@@ -1,0 +1,5 @@
+scrapling
+playwright
+fastapi
+uvicorn
+python-multipart
