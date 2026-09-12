@@ -157,7 +157,7 @@ def launch_complaint(
         server.sendmail(SENDER_EMAIL, email, text)
         server.quit()
 
-        return JSONResponse(content={"status": "success", "message": "Formal complaint letter has been generated and emailed to you successfully!"})
+        return JSONResponse(content={"status": "success", "message": "Formal complaint letter has been generated and emailed to the authority successfully!"})
         
     except Exception as e:
         print(f"Error launching complaint: {e}")
