@@ -89,7 +89,10 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const formData = new FormData(form);
         
-        const apiUrl = document.getElementById('apiUrlInput').value.trim() || window.location.origin;
+        // Auto-detect backend URL: Use the provided DevTunnels URL when deployed to Vercel, 
+        // otherwise use current origin if we are running locally.
+        const isLocalhost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        const apiUrl = isLocalhost ? window.location.origin : 'https://7qgj0h26-8000.inc1.devtunnels.ms';
         const baseUrl = apiUrl.endsWith('/') ? apiUrl.slice(0, -1) : apiUrl;
         
         try {
