@@ -133,7 +133,7 @@ def launch_complaint(
                 {"role": "system", "content": system_prompt},
                 {"role": "user", "content": user_prompt}
             ],
-            model="llama3-8b-8192",
+            model="openai/gpt-oss-120b",
             temperature=0.7,
         )
         
