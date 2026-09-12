@@ -95,13 +95,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const apiUrl = isLocalhost ? window.location.origin : 'https://7qgj0h26-8000.inc1.devtunnels.ms';
         const baseUrl = apiUrl.endsWith('/') ? apiUrl.slice(0, -1) : apiUrl;
         
+        console.log(`[Fariad] 🚀 Sending request to: ${baseUrl}/ask`);
+        console.log(`[Fariad] 📦 Payload contains ${[...formData.entries()].length} fields`);
+        
         try {
             const response = await fetch(`${baseUrl}/ask`, {
                 method: 'POST',
                 body: formData
             });
             
+            console.log(`[Fariad] 📥 Response status: ${response.status} ${response.statusText}`);
+            
             const data = await response.json();
+            console.log(`[Fariad] 📄 Response data:`, data);
             
             // Re-enable UI
             submitBtn.disabled = false;
@@ -123,6 +129,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             
         } catch (error) {
+            console.error(`[Fariad] ❌ Error during request:`, error);
+            
             // Re-enable UI
             submitBtn.disabled = false;
             btnText.textContent = 'Automate Request';
