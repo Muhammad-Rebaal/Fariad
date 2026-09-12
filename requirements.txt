@@ -3,3 +3,5 @@ playwright
 fastapi
 uvicorn
 python-multipart
+python-dotenv
+groq

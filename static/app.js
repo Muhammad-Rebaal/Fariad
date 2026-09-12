@@ -169,6 +169,64 @@ document.addEventListener('DOMContentLoaded', () => {
                 badge.textContent = 'Success';
                 badge.className = 'badge';
                 responseContent.textContent = data.response;
+                
+                // Set up Launch Complaint button
+                const launchBtn = document.getElementById('launchComplaintBtn');
+                const launchFeedback = document.getElementById('launchFeedback');
+                if (launchBtn) {
+                    // Reset state
+                    launchFeedback.classList.add('hidden');
+                    launchBtn.disabled = false;
+                    
+                    // Replace to clear old event listeners
+                    const newLaunchBtn = launchBtn.cloneNode(true);
+                    launchBtn.parentNode.replaceChild(newLaunchBtn, launchBtn);
+                    
+                    newLaunchBtn.addEventListener('click', async () => {
+                        newLaunchBtn.disabled = true;
+                        newLaunchBtn.querySelector('.btn-text').textContent = 'Generating...';
+                        newLaunchBtn.querySelector('.spinner').classList.remove('hidden');
+                        launchFeedback.classList.add('hidden');
+                        
+                        const launchData = new FormData();
+                        launchData.append('name', nameInput.value);
+                        launchData.append('email', emailInput.value);
+                        launchData.append('district', districtInput.value);
+                        launchData.append('postal_code', postalCodeInput.value);
+                        launchData.append('street', streetInput.value);
+                        launchData.append('prompt', document.getElementById('promptInput').value);
+                        launchData.append('response', data.response);
+                        
+                        try {
+                            const launchRes = await fetch(`${baseUrl}/launch-complaint`, {
+                                method: 'POST',
+                                body: launchData
+                            });
+                            const launchResult = await launchRes.json();
+                            
+                            newLaunchBtn.disabled = false;
+                            newLaunchBtn.querySelector('.btn-text').textContent = 'Launch Complaint';
+                            newLaunchBtn.querySelector('.spinner').classList.add('hidden');
+                            
+                            launchFeedback.classList.remove('hidden');
+                            if (launchRes.ok && launchResult.status === 'success') {
+                                launchFeedback.style.color = 'var(--success)';
+                                launchFeedback.textContent = launchResult.message;
+                            } else {
+                                launchFeedback.style.color = 'var(--error)';
+                                launchFeedback.textContent = launchResult.message || 'Failed to launch complaint.';
+                            }
+                        } catch (err) {
+                            newLaunchBtn.disabled = false;
+                            newLaunchBtn.querySelector('.btn-text').textContent = 'Launch Complaint';
+                            newLaunchBtn.querySelector('.spinner').classList.add('hidden');
+                            launchFeedback.classList.remove('hidden');
+                            launchFeedback.style.color = 'var(--error)';
+                            launchFeedback.textContent = err.message || 'An error occurred.';
+                        }
+                    });
+                }
+                
                 // Scroll to response
                 responseSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
             } else {

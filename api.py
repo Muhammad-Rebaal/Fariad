@@ -7,14 +7,26 @@ from pydantic import BaseModel
 import uvicorn
 from typing import Optional
 import hashlib
+import smtplib
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
+
+from dotenv import load_dotenv
+import groq
 
 from fastapi.middleware.cors import CORSMiddleware
 
 # Import the refactored automation script
 from main import run_automation
-from database import init_db, get_or_create_user, create_complaint, get_similar_complaints_count, get_cached_response, save_cached_response
+from database import init_db, get_or_create_user, create_complaint, get_similar_complaints_count, get_cached_response, save_cached_response, get_all_complaints
 
 app = FastAPI(title="Gemini Automation API")
+
+# Load environment variables
+load_dotenv()
+GROQ_API_KEY = os.getenv("groq_api")
+APP_PASSWORD = os.getenv("App_password")
+SENDER_EMAIL = "mrebaal14@gmail.com"
 
 app.add_middleware(
     CORSMiddleware,
@@ -91,6 +103,71 @@ def ask_gemini(
             
         return JSONResponse(content={"status": "success", "response": result_text})
         
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"status": "error", "message": str(e)})
+
+@app.post("/launch-complaint")
+def launch_complaint(
+    name: str = Form(...),
+    email: str = Form(...),
+    district: str = Form(...),
+    postal_code: str = Form(...),
+    street: str = Form(...),
+    prompt: str = Form(...),
+    response: str = Form(...)
+):
+    try:
+        if not GROQ_API_KEY:
+            raise ValueError("Groq API key not found in .env")
+        if not APP_PASSWORD:
+            raise ValueError("App password not found in .env")
+
+        # 1. Generate Formal Application via Groq
+        client = groq.Groq(api_key=GROQ_API_KEY)
+        
+        system_prompt = "You are a professional legal assistant. Write a formal complaint letter or application to the relevant municipal authority on behalf of the citizen. Keep it professional, concise, and structured."
+        user_prompt = f"Name: {name}\nEmail: {email}\nAddress: {street}, {district}, {postal_code}\n\nUser Issue: {prompt}\n\nAuthority Advice (from Gemini): {response}\n\nPlease generate the formal application letter based on this information."
+        
+        chat_completion = client.chat.completions.create(
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt}
+            ],
+            model="llama3-8b-8192",
+            temperature=0.7,
+        )
+        
+        application_letter = chat_completion.choices[0].message.content
+        
+        # 2. Send Email via SMTP
+        msg = MIMEMultipart()
+        msg['From'] = SENDER_EMAIL
+        msg['To'] = email
+        msg['Subject'] = f"Formal Complaint Application - {district}"
+        
+        body = f"Hello {name},\n\nAs requested, here is the generated formal application for your complaint. You can forward this to the respective authorities.\n\n------------------------\n\n{application_letter}\n\n------------------------\n\nPowered by Fariad."
+        msg.attach(MIMEText(body, 'plain'))
+        
+        server = smtplib.SMTP('smtp.gmail.com', 587)
+        server.starttls()
+        # Note: Depending on the email service, app passwords might require removing spaces
+        clean_password = APP_PASSWORD.replace(" ", "").replace('"', '') 
+        server.login(SENDER_EMAIL, clean_password)
+        text = msg.as_string()
+        server.sendmail(SENDER_EMAIL, email, text)
+        server.quit()
+
+        return JSONResponse(content={"status": "success", "message": "Formal complaint letter has been generated and emailed to you successfully!"})
+        
+    except Exception as e:
+        print(f"Error launching complaint: {e}")
+        return JSONResponse(status_code=500, content={"status": "error", "message": str(e)})
+
+@app.get("/api/complaints")
+def list_complaints():
+    try:
+        complaints = get_all_complaints()
+        return JSONResponse(content={"status": "success", "data": complaints})
     except Exception as e:
         return JSONResponse(status_code=500, content={"status": "error", "message": str(e)})
 

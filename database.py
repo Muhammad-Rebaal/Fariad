@@ -88,3 +88,19 @@ def save_cached_response(image_hash: str, response_text: str):
         cursor = conn.cursor()
         cursor.execute("INSERT OR REPLACE INTO image_cache (image_hash, response_text) VALUES (?, ?)", (image_hash, response_text))
         conn.commit()
+
+def get_all_complaints():
+    """Returns a list of all complaints with their associated user data."""
+    with sqlite3.connect(DB_PATH) as conn:
+        cursor = conn.cursor()
+        cursor.execute("""
+            SELECT 
+                c.id, u.name, u.email, u.district, u.street, 
+                c.complaint_type, c.complaint, c.tracking_no, c.filed 
+            FROM complaints c
+            JOIN users u ON c.user_id = u.id
+            ORDER BY c.id DESC
+        """)
+        
+        columns = [col[0] for col in cursor.description]
+        return [dict(zip(columns, row)) for row in cursor.fetchall()]

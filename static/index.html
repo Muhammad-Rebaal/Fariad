@@ -19,7 +19,8 @@
     </div>
 
     <div class="container">
-        <header>
+        <header style="position: relative;">
+            <a href="complaints.html" style="position: absolute; right: 0; top: 0; color: var(--primary); text-decoration: none; font-weight: 600; background: rgba(255,255,255,0.4); padding: 0.5rem 1rem; border-radius: 8px; border: 1px solid var(--glass-border); transition: all 0.2s;">View Complaints</a>
             <img src="logo.jpeg" alt="Fariad Logo" class="project-logo">
             <h1>Fariyad</h1>
             <p>Deploy prompts and images directly to your active session.</p>
@@ -116,6 +117,15 @@
                 </div>
                 <div id="responseContent" class="response-content">
                     <!-- Response injected here via JS -->
+                </div>
+                
+                <div id="launchComplaintWrapper" style="margin-top: 2rem; border-top: 1px solid var(--glass-border); padding-top: 1.5rem; display: flex; flex-direction: column; align-items: center; gap: 1rem;">
+                    <p style="color: var(--text-muted); font-size: 0.95rem; text-align: center;">Ready to take action? We can generate a formal application using Groq AI and email it to you.</p>
+                    <button type="button" id="launchComplaintBtn" class="primary-btn" style="margin-top: 0; width: auto; padding: 0.75rem 2rem;">
+                        <span class="btn-text">Launch Complaint</span>
+                        <div class="spinner hidden"></div>
+                    </button>
+                    <div id="launchFeedback" class="hidden" style="font-size: 0.95rem; font-weight: 600; text-align: center;"></div>
                 </div>
             </div>
 

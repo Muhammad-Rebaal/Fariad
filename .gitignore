@@ -2,3 +2,5 @@ __pycache__/
 chrome_profile/
 img/
 *.json
+*.env
+.env
